@@ -4,7 +4,6 @@ import SignOut from './Components/SignOut'
 // import { app } from './base'
 import Routes from './Routes'
 import './App.css';
-
 import firebase from 'firebase'
 import 'firebase/storage'
 import 'firebase/firestore'
@@ -24,27 +23,32 @@ firebase.initializeApp({
 
 const auth = firebase.auth();
 
-console.log("APP ", auth)
-
 function App() {
 
 	const [user] = useAuthState(auth)
 
+	var userObj = auth.currentUser;
+	var userEmail, userName;
+
+	if (userObj != null) {
+		userName = userObj.displayName;
+		userEmail = userObj.email;
+		console.log(userEmail, userName)
+	}
+
 	return (
 		<div className="App">
 			<header>
-				<h1>Grunschule Neues Tor - Homeschooling</h1>
-				<SignOut auth={auth} />
+				<img src="https://layout.verwaltungsportal.de/10226/img/logo.png" alt="Grundschule Neues Tor" />
+				<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+					<p>{userName}</p>
+					<SignOut auth={auth} />
+				</div>
 			</header>
 			<section>
 				{user ?
 
 					<Routes user={user} />
-					// <ClassesRoom
-					// 	app={app}
-					// 	firestore={firestore}
-					// 	auth={auth}
-					// />
 					:
 					<SignIn
 						firebase={firebase}
